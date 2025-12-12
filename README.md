@@ -28,23 +28,28 @@ Dự án được phát triển với **STM32CubeMX** và sử dụng **STM32 HA
 
 #### 1.1 Button Input Pin
 ```
-Port: GPIO_PORTX (ví dụ: PA0, PB2)
-Mode: GPIO_MODE_IT_FALLING (hoặc IT_RISING tùy theo cấu hình)
-Pull: GPIO_PULLUP (nếu button kéo xuống khi nhấn)
-Speed: GPIO_SPEED_FREQ_HIGH
+Port: PA0
+Mode: GPIO_MODE_IT_RISING 
+Pull: GPIO_PULLDOWN (button mặc định kéo về GND khi không nhấn, tránh hiện tượng floating)
+Speed: GPIO_SPEED_FREQ_LOW
 ```
 
-| Chân GPIO | Chế độ | Pull-up/Down | Tốc độ | Mục đích |
-|-----------|-------|--------------|-------|---------|
-| Button Pin | Input + EXTI | Pull-up | HIGH | Phát hiện sự kiện nhấn nút |
-| LED Output (tùy chọn) | Output Push-Pull | None | HIGH | Hiển thị trạng thái |
-| UART TX (PA2) | Alternate Push-Pull | None | HIGH | Debug output |
-| UART RX (PA3) | Input Floating | None | HIGH | Debug input |
+#### 1.2 LED Output Pin
+```
+Port: PB2
+Mode: GPIO_MODE_OUTPUT_PP
+Pull: GPIO_NOPULL
+Speed: GPIO_SPEED_FREQ_LOW
+```
 
-#### 1.2 Pull-up Configuration
-- **Pull-up** được bật để giữ chân ở mức cao khi button không được nhấn
-- Khi button được nhấn, chân sẽ kéo xuống GND
-- Giúp tránh tín hiệu lơ lửng (floating signal)
+#### 1.2 UART Debug pin
+```
+Port: Uart2 (PA2(TX), PA3(RX))
+Mode: 115200 8N1
+- Sử dụng printf() để in thông tin debug
+- Hàm _write() được override để gửi qua UART
+- Timeout: 100ms cho mỗi lần truyền
+```
 
 ### 2. External Interrupt (EXTI) Configuration
 
@@ -116,42 +121,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     }
 }
 ```
-
-### 4. UART Configuration (USART2)
-
-#### 4.1 UART Setup
-```
-USART: USART2 (PA2 TX, PA3 RX)
-Baud Rate: 115200 bps
-Word Length: 8 Bits
-Stop Bits: 1
-Parity: None
-Mode: Transmit/Receive
-Hardware Flow Control: None
-```
-
-#### 4.2 Debug Output
-- Sử dụng `printf()` để in thông tin debug
-- Hàm `_write()` được override để gửi qua UART
-- Timeout: 100ms cho mỗi lần truyền
-
-### 5. System Clock Configuration
-
-#### 5.1 Clock Sources
-```
-HSE (High Speed External): 8MHz
-System Clock Source: PLL
-PLL Multiply Factor: 9x
-System Clock: 72MHz (8MHz × 9)
-```
-
-#### 5.2 Peripheral Clock Division
-```
-AHB Prescaler: 1 (72MHz)
-APB1 Prescaler: 2 (36MHz) → Timer clock = 72MHz
-APB2 Prescaler: 1 (72MHz)
-```
-
 ---
 
 ## 🎯 II. CÁC KỸ THUẬT SỬ DỤNG
