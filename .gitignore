@@ -1,0 +1,31 @@
+# ===== GITIGNORE =====
+
+# === BỎ QUA THỰC THỂ ===
+Debug/
+Release/
+
+# # === THEO DÕI CÁC THƯ MỤC SOURCE CODE ===
+# !.settings/
+# !Core/
+# !Drivers/
+
+# # === THEO DÕI CÁC FILE CẤU HÌNH ===
+# !*.ioc
+# !*.ld
+# !*.launch
+# !makefile
+# !.mxproject
+# !.cproject
+# !.project
+
+# # === THEO DÕI CÁC FILE DOCUMENTATION ===
+# !README.md
+# !*.txt
+# !Backup/
+# !Doc/
+
+# # === THEO DÕI CÁC SCRIPT ===
+# !*.py
+# !*.sh
+# !*.bash
+
