@@ -33,7 +33,7 @@ typedef enum {
 	BTN_DEBOUNCE_RELEASE,
 	BTN_WAIT_RELEASE,
 	BTN_WAIT_NEXT_PRESS,
-	BTN_LONG_PRESS_DETECTED  // Thêm state này để track long press đã được gọi
+	BTN_LONG_PRESS_DETECTED
 } ButtonState;
 /* USER CODE END PTD */
 
@@ -95,18 +95,12 @@ int _write(int file, char *pData, int len)
 
 /**
  * Flow xử lý nút nhấn giờ đã đúng:
-Short Press: IDLE → DEBOUNCE → PRESSED → DEBOUNCE_RELEASE → WAIT_SECOND_PRESS (timeout) → ShortPress → IDLE
+Short Press: IDLE → DEBOUNCE → PRESSED → DEBOUNCE_RELEASE → WAIT_SECOND_PRESS → EXTI or Timeout → Short/Double/Triple Press → IDLE
 Long Press: IDLE → DEBOUNCE → PRESSED (>=LONG_PRESS_MS) → WAIT_RELEASE → DEBOUNCE_RELEASE → IDLE → LongPress
-Double Press: IDLE → DEBOUNCE → PRESSED → DEBOUNCE_RELEASE → WAIT_SECOND_PRESS (EXTI) → DoublePress → IDLE
- */
+*/
 void On_ShortPress(void) {
 	// TODO: your code
 	printf("short press\r\n");
-}
-
-void On_LongPress(void) {
-	// TODO: your code
-	printf("long press\r\n");
 }
 
 void On_DoublePress(void) {
@@ -118,6 +112,12 @@ void On_TriplePress(void) {
 	// TODO: your code
 	printf("triple press\r\n");
 }
+
+void On_LongPress(void) {
+	// TODO: your code
+	printf("long press\r\n");
+}
+
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
@@ -187,7 +187,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			else if (press_time >= LONG_PRESS_MS)
 			{
 				// LONG PRESS callback - gọi chỉ 1 lần
-				On_LongPress();
+				On_LongPress(); // Khi đủ thời gian long press, tự động chuyển sang hàm LongPress, không cần nhả phím button
 				press_time = 0;
 				btn_state = BTN_LONG_PRESS_DETECTED; // Chuyển sang state mới
 				exti_flag = 0;

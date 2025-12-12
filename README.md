@@ -325,15 +325,15 @@ Công việc:
              │debounce_cnt│ >= 100ms?
              │ >= 100     │
              └────┬───────┘
-                │
-        ┌──Yes──┴──No──┐
-        ▼              ▼
+                  │
+          ┌──Yes──┴──No──┐
+          ▼              ▼
         ┌─────┐        ┌──────┐
         │ btn │        │ Wait │
         │=    │        │ more │
         │PRES │        └──────┘
         │SED  │
-        └────┬┘
+        └──┬──┘
             │
             ▼
         Check if press_time >= 2000ms
