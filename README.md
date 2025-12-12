@@ -211,40 +211,29 @@ Thời gian  │ Tín hiệu  │ Trạng thái         │ Hành động
 
 ### 3. Button Event Detection
 
-#### 3.1 Single Press Detection
+#### 3.1 Single/Double/Triple Press Detection
 ```
 Điều kiện: 
   • Debounce xong (tín hiệu ổn định)
-  • Nhấn < 2 giây
+  • Thời gian giữa các lần nhấn < 1 giây
   • Nhả nút
 
 Flow:
   BTN_IDLE → EXTI → BTN_DEBOUNCE → BTN_PRESSED
   → BTN_DEBOUNCE_RELEASE → BTN_WAIT_SECOND_PRESS
-  → (timeout) → Single Press Event → BTN_IDLE
+  → BTN_PRESSED or Timeout → Single/Double/Triple Press Event → BTN_IDLE
 ```
 
 #### 3.2 Long Press Detection
 ```
 Điều kiện:
-  • Nhấn ≥ 2 giây
-  • Chưa phát hiện long press
+  • Nhấn giữ ≥ 2 giây
+  • Nhả nút
 
 Flow:
   BTN_PRESSED (press_time ≥ 2000ms)
   → BTN_LONG_PRESS_DETECTED → Long Press Event
   → BTN_WAIT_RELEASE → BTN_IDLE
-```
-
-#### 3.3 Double Press Detection
-```
-Điều kiện:
-  • Nhấn thứ nhất < 2 giây
-  • Nhấn thứ hai trong 1 giây
-
-Flow:
-  Short Press → BTN_WAIT_SECOND_PRESS
-  → EXTI (trong 1s) → Double Press Event → BTN_IDLE
 ```
 
 ### 4. Interrupt Handling Strategy
