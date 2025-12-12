@@ -97,7 +97,7 @@ int _write(int file, char *pData, int len)
  * Flow xử lý nút nhấn giờ đã đúng:
 Short Press: IDLE → DEBOUNCE → PRESSED → DEBOUNCE_RELEASE → WAIT_SECOND_PRESS → EXTI or Timeout → Short/Double/Triple Press → IDLE
 Long Press: IDLE → DEBOUNCE → PRESSED (>=LONG_PRESS_MS) → WAIT_RELEASE → DEBOUNCE_RELEASE → IDLE → LongPress
-*/
+ */
 void On_ShortPress(void) {
 	// TODO: your code
 	printf("short press\r\n");
@@ -229,7 +229,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			else
 			{
 				release_time++;
-				
+
 				if (release_time >= NEXT_PRESS_MS)
 				{
 					// Timeout - không có lần nhấn tiếp theo
@@ -239,7 +239,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 						On_DoublePress();
 					else if (press_count == 3)
 						On_TriplePress();
-					
+
 					press_count = 0;
 					press_time = 0;
 					btn_state = BTN_IDLE;
@@ -247,8 +247,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				}
 			}
 			break;
-		
-			case BTN_WAIT_RELEASE:
+
+		case BTN_WAIT_RELEASE:
 			// PA0 = 0 (RESET) = nút được thả
 			if (btn_pin_state == GPIO_PIN_RESET)
 			{
@@ -312,7 +312,7 @@ int main(void)
 	/* USER CODE BEGIN 2 */
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, 1);
-	printf("waiting.....\r\n");
+	printf("waiting button pressed.....\r\n");
 
 	/* USER CODE END 2 */
 
@@ -320,13 +320,9 @@ int main(void)
 	/* USER CODE BEGIN WHILE */
 	while (1)
 	{
-		// btn_pin_state được cập nhật trong EXTI callback và TIM callback
-		// Không cần cập nhật ở đây nữa
-		//    printf("Hello World\r\n");
-		//    HAL_Delay(200);
 		printf("btn_state: %d, btn_pin_state: %d, press_count: %d press_time: %ld\r\n",
-       btn_state, btn_pin_state, press_count, press_time);
-	   HAL_Delay(200);
+				btn_state, btn_pin_state, press_count, press_time);
+		HAL_Delay(200);
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
